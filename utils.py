@@ -1,18 +1,17 @@
 from random import randint
 import pandas as pd
-import requests, zipfile
-try:
-    from StringIO import StringIO
-except ImportError:
-    from io import StringIO
+
 import os
+from io import BytesIO
+from zipfile import ZipFile
+from urllib.request import urlopen
 
 def download_data():
     if 'train_FD004.txt' not in os.listdir('data'):
         print('Downloading Data...')
         # Download the data
-        r = requests.get("https://ti.arc.nasa.gov/c/6/", stream=True)
-        z = zipfile.ZipFile(StringIO.StringIO(r.content))
+        r = urlopen("https://ti.arc.nasa.gov/c/6/")
+        z = ZipFile(BytesIO(r.read()))
         z.extractall('data')
     else:
         print('Using previously downloaded data')
